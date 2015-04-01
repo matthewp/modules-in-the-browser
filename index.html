@@ -37,6 +37,14 @@
       .browser-support img {
         border: none !important;
       }
+
+      .affirm {
+        color: red;
+      }
+
+      .align-middle {
+        vertical-align: middle !important;
+      }
     </style>
   </head>
 
@@ -54,10 +62,82 @@
           </p>
         </section>
         <section>
-          <h2>What are modules</h2>
+          <section>
+            <h2>What are modules</h2>
+            <ul>
+              <li class="fragment">Unit of code useable by other modules.</li>
+            </ul>
+          </section>
+          <section>
+            <h4>modal-loader.js</h3>
+            <pre><code data-trim class="javascript">
+import $ from "jquery";
+
+export default function() {
+  $("#modal").fadeIn();
+};
+            </code></pre>
+          </section>
+          <section>
+            <h4>index.html</h4>
+            <pre><code data-trim class="html">
+&lt;module&gt;
+  import moduleLoader from "/modal-loader.js";
+  import $ from "jquery";
+
+  $(function() {
+    modalLoader();
+  });
+&lt;/module&gt;
+            </code></pre>
+          </section>
         </section>
         <section>
-          <h2>What is the System Loader</h2>
+          <section>
+            <h2>What is a Loader?</h2>
+            <ol>
+              <li class="fragment">System for loading and executing modules.</li>
+              <li class="fragment">Dependency manager.</li>
+              <li class="fragment">Module registry.</li>
+            <ol>
+          </section>
+          <section>
+            <h2>Examples</h2>
+            <ul>
+              <li class="fragment">RequireJS: <strong class="fragment affirm">YES</strong></li>
+              <li class="fragment">Browserify: <strong class="fragment affirm">NO</strong></li>
+              <li class="fragment">WebPack: <strong class="fragment affirm">YES (sort of)</strong></li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>WhatWG Loader</h2>
+            <ul>
+              <li><a href="https://whatwg.github.io/loader/">Spec</a> <small class="align-middle">whatwg.github.io/loader</small></li>
+              <li><a href="https://github.com/ModuleLoader/es6-module-loader">Polyfill</a> <small class="align-middle">github.com/ModuleLoader/es6-module-loader</small></li>
+            </ul>
+          </section>
+          <section>
+            <h2>Reflect.Loader</h2>
+            <pre><code data-trim class="javascript">
+Reflect.Loader; // Capital L
+Reflect.loader; // Lowercase l
+Reflect.loader instanceof Reflect.Loader; // -> true
+            </code></pre>
+          </section>
+          <section>
+            <h2>Reflect.loader</h2>
+            <ul>
+              <li class="fragment">Default Browser Loader.</li>
+              <li class="fragment">Loads <code>&lt;module&gt;s</code></li>
+              <li class="fragment">Can be ignored.</li>
+              <li class="fragment">Can be extended.</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Provides hooks to extend the loading process.</h2>
+          </section>
         </section>
         <section>
           <section>
