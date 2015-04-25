@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="css/theme/default.css" id="theme">
 
     <!-- For syntax highlighting -->
-    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <link rel="stylesheet" href="lib/css/zenburn2.css">
 
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
     <script>
@@ -45,6 +45,10 @@
       .align-middle {
         vertical-align: middle !important;
       }
+
+      .text-plain, .text-plain * {
+        text-transform: none !important;
+      }
     </style>
   </head>
 
@@ -69,26 +73,95 @@
             </ul>
           </section>
           <section>
-            <h4>modal-loader.js</h3>
+            <h4>kitten.js</h3>
             <pre><code data-trim class="javascript">
 import $ from "jquery";
 
-export default function() {
-  $("#modal").fadeIn();
+export default function(){
+  return $("&lt;img src='http://placekitten.com/g/300/400'/&gt;");
 };
             </code></pre>
           </section>
           <section>
             <h4>index.html</h4>
-            <pre><code data-trim class="html">
+            <pre><code data-trim class="javascript">
 &lt;module&gt;
-  import moduleLoader from "/modal-loader.js";
+  import kitten from "./kitten.js";
   import $ from "jquery";
 
-  $(function() {
-    modalLoader();
-  });
+  $( () => $("body").append(kitten()) );
 &lt;/module&gt;
+            </code></pre>
+          </section>
+          <section>
+            <img src="http://placekitten.com/g/300/400">
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Syntax</h2>
+            <ul style="margin-bottom: 100px;">
+              <li class="fragment">Statically declared</li>
+              <li class="fragment">Dynamically loaded</li>
+            </ul>
+            <div></div>
+            <small><a href="http://www.2ality.com/2014/09/es6-modules-final.html">ECMAScript 6 modules: the final syntax</a></small>
+          </section>
+          <section class="text-plain">
+            <h2>export</h2>
+            <pre><code data-trim class="javascript">
+const math = { add, subtract };
+
+export const a = "b";
+
+export function add(a){
+  a + 1;
+}
+
+function subtract(a){
+  return a - 1;
+}
+
+export default math;
+
+export { subtract, add as addOne };
+            </code></pre>
+          </section>
+          <section class="text-plain">
+            <h2>import</h2>
+            <pre><code data-trim class="javascript">
+import { add, subtract } from "math";
+
+import { add as addOne } from "math";
+
+import * as math from "math";
+
+import math from "math";
+import { default as math } from "math";
+
+import math, { add } from "math";
+
+import "math";
+            </code></pre>
+          </section>
+          <section>
+            <h2>Dynamic loading</h2>
+          </section>
+          <section class="text-plain">
+            <h4>System.import</h4>
+            <pre><code data-trim class="javascript">
+System.import("jquery").then(jQuery => {
+  
+  const $ = jQuery.default;
+
+});
+            </code></pre>
+          </section>
+          <section class="text-plain">
+            <h4>Possibility</h4>
+            <pre><code data-trim class="javascript">
+const $ = await import.default("jquery");
+const { ajax } = await import.namespace("jquery");
             </code></pre>
           </section>
         </section>
@@ -648,13 +721,12 @@ function linkify( selector ) {
           { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
           { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
           { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/highlight/highlight8.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
           { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
           { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
         ]
       });
 
     </script>
-
   </body>
 </html>
