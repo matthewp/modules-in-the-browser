@@ -79,28 +79,12 @@
             </aside>
           </section>
           <section>
-            <h4>kitten.js</h3>
-            <pre><code data-trim class="javascript">
-import $ from "jquery";
-
-export default function(){
-  return $("&lt;img src='http://placekitten.com/g/300/400'/&gt;");
-};
-            </code></pre>
-          </section>
-          <section>
-            <h4>index.html</h4>
-            <pre><code data-trim class="javascript">
-&lt;module&gt;
-  import kitten from "./kitten.js";
-  import $ from "jquery";
-
-  $( () => $("body").append(kitten()) );
-&lt;/module&gt;
-            </code></pre>
-          </section>
-          <section>
-            <img src="http://placekitten.com/g/300/400">
+            <ul>
+              <li>How modules have evolved.</li>
+              <li>Why we need modules defined at the spec level.</li>
+              <li>How to use ES modules.</li>
+              <li>How to hack the loader for fun/profit.</li>
+            </ul>
           </section>
         </section>
         <section>
@@ -306,22 +290,34 @@ var config = require("config");
           </section>
           <section class="text-plain">
             <h2>export</h2>
+
+            <h4>math.js</h4>
             <pre><code data-trim class="javascript">
-const math = { add, subtract };
+export default function(a, b){
+  a + b;
+};
+            </code></pre>
+          </section>
+          <section class="text-plain">
+            <h2>import</h2>
+            <pre><code data-trim class="javascript">
+import add from "math";
 
-export const a = "b";
+add(1, 2); // -> 3
+            </code></pre>
+          </section>
+          <section class="text-plain">
+            <h2>export</h2>
 
-export function add(a){
-  a + 1;
-}
+            <h4>math.js</h4>
+            <pre><code data-trim class="javascript">
+export function add(a, b){
+  return a + b;
+};
 
-function subtract(a){
-  return a - 1;
-}
-
-export default math;
-
-export { subtract, add as addOne };
+export function subtract(a, b){
+  return b - a;
+};
             </code></pre>
           </section>
           <section class="text-plain">
@@ -329,16 +325,17 @@ export { subtract, add as addOne };
             <pre><code data-trim class="javascript">
 import { add, subtract } from "math";
 
-import { add as addOne } from "math";
-
+add(1, 2); // -> 3
+subtract(1, 3); // -> 2
+            </code></pre>
+          </section>
+          <section class="text-plain">
+            <h2>import</h2>
+            <pre><code data-trim class="javascript">
 import * as math from "math";
 
-import math from "math";
-import { default as math } from "math";
-
-import math, { add } from "math";
-
-import "math";
+math.add(1, 2); // -> 3
+math.subtract(1, 3); // -> 2
             </code></pre>
           </section>
           <section>
