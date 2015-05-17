@@ -1,0 +1,24 @@
+<title>image preloading</title>
+
+<div id="main">
+  <div><button>Show image</button></div>
+</div>
+
+<script src="../../lib/steal/steal.js" config="../../package.json!npm">
+
+import $ from "jquery";
+
+System.baseURL = "./";
+
+
+init();
+
+function init(){
+  $("button").bind("click", function(){
+    $("#main").append($("<img src='es6.png'/>"));
+  });
+}
+
+
+</script>
+

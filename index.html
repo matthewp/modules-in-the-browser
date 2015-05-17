@@ -16,6 +16,7 @@
 
     <link rel="stylesheet" href="css/reveal.min.css">
     <link rel="stylesheet" href="css/theme/default.css" id="theme">
+    <link rel="stylesheet" href="css/custom.css">
 
     <!-- For syntax highlighting -->
     <link rel="stylesheet" href="lib/css/zenburn2.css">
@@ -71,6 +72,11 @@
             <ul>
               <li class="fragment">Unit of code useable by other modules.</li>
             </ul>
+            <aside class="notes">
+              <ul>
+                <li>Ask what they think modules are.</li>
+              </ul>
+            </aside>
           </section>
           <section>
             <h4>kitten.js</h3>
@@ -130,7 +136,7 @@ app.math = {
             <h4>dates.js</h4>
             <pre><code data-trim class="javascript">
 app.dates = {
-  compare: function(a, b) { return app.subtract(a, b) > 0; }
+  compare: function(a, b) { return app.math.subtract(a, b) > 0; }
 };
             </code></pre>
           </section>
@@ -157,6 +163,21 @@ app.dates = {
 &lt;script src="tabs.js"&gt;&lt;/script&gt;
 &lt;script src="main.js"&gt;&lt;/script&gt;
             </code></pre>
+          </section>
+          <section>
+            <table>
+              <thead>
+                <tr><th>Module</th><th>Depends On</th><th>Is dependency</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>jquery.datepicker.js</td><td>jquery.js</td><td>main.js</td></tr>
+                <tr><td>app.js</td><td></td><td><p>math.js</p><p>dates.js</p></td></tr>
+                <tr><td>math.js</td><td>utils.js</td><td>dates.js</td></tr>
+                <tr><td>dates.js</td><td>math.js</td><td>main.js</td></tr>
+                <tr><td>tabs.js</td><td><p>utils.js</p><p>jquery.js</p></td><td>main.js</td></tr>
+                <tr><td>main.js</td><td><p>dates.js</p><p>jquery.js</p><p>jquery.datepicker.js</p><p>tabs.js</p></td><td></td></tr>
+              </tbody>
+            </table>
           </section>
           <section>
             <h2>Problems</h2>
@@ -241,6 +262,37 @@ var config = require("config");
               <li class="fragment">Solutions have similiar, but different APIs.</li>
             </ul>
           </section>
+          <section>
+            <h2>Why ES Modules</h2>
+          </section>
+          <section>
+            <h4>Least common denominator</h4>
+            <pre><code data-trim class="javascript" style="max-height:none;">
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['exports', 'b'], function (exports, b) {
+            factory((root.commonJsStrictGlobal = exports), b);
+        });
+    } else if (typeof exports === 'object') {
+        // CommonJS
+        factory(exports, require('b'));
+    } else {
+        // Browser globals
+        factory((root.commonJsStrictGlobal = {}), root.b);
+    }
+}(this, function (exports, b) {
+    //use b in some fashion.
+
+    // attach properties to the exports object to define
+    // the exported module properties.
+    exports.action = function () {};
+}));
+            </code></pre>
+          </section>
+          <section>
+            <h4>To be safe, have 0 dependencies</h4>
+          </section>
         </section>
         <section>
           <section>
@@ -311,21 +363,15 @@ const { ajax } = await import.namespace("jquery");
           </section>
         </section>
         <section>
-          <section>
+          <section data-background="img/loader.gif">
+            <div class="black-box" style="min-height: 300px;">
             <h2>What is a Loader?</h2>
             <ol>
               <li class="fragment">System for loading and executing modules.</li>
               <li class="fragment">Dependency manager.</li>
               <li class="fragment">Module registry.</li>
             <ol>
-          </section>
-          <section>
-            <h2>Examples</h2>
-            <ul>
-              <li class="fragment">RequireJS: <strong class="fragment affirm">YES</strong></li>
-              <li class="fragment">Browserify: <strong class="fragment affirm">NO</strong></li>
-              <li class="fragment">WebPack: <strong class="fragment affirm">YES (sort of)</strong></li>
-            </ul>
+            </div>
           </section>
         </section>
         <section>
@@ -337,15 +383,15 @@ const { ajax } = await import.namespace("jquery");
             </ul>
           </section>
           <section>
-            <h2>Reflect.Loader</h2>
+            <h2>Loader</h2>
             <pre><code data-trim class="javascript">
-Reflect.Loader; // Capital L
-Reflect.loader; // Lowercase l
-Reflect.loader instanceof Reflect.Loader; // -> true
+Loader; // Capital L -> constructor
+loader; // Lowercase l -> instance
+loader instanceof Loader; // -> true
             </code></pre>
           </section>
           <section>
-            <h2 style="text-transform: none;">Reflect.loader</h2>
+            <h2 style="text-transform: none;">System loader</h2>
             <ul>
               <li class="fragment">Default Browser Loader.</li>
               <li class="fragment">Loads <code>&lt;module&gt;s</code></li>
@@ -355,6 +401,14 @@ Reflect.loader instanceof Reflect.Loader; // -> true
           </section>
           <section>
             <h2>Provides hooks to extend the loading process.</h2>
+          </section>
+          <section>
+            <h4 style="text-transform: none;">normalize -> locate -> fetch -> translate -> instantiate</h4>
+
+            <aside class="notes">
+              <ul><li>These are just functions on the Loader prototype.</li>
+                <li>normalize/locate might because resolve</li></ul>
+            </aside>
           </section>
         </section>
         <section>
@@ -383,6 +437,11 @@ Reflect.loader instanceof Reflect.Loader; // -> true
               <li class="fragment">Locate it: <code>http://example.com/foo/bar.js</code></li>
             </ul>
           </section>
+          <section data-background="img/ace.gif">
+            <div class="black-box">
+              <h2>Examples</h2>
+            </div>
+          </section>
         </section>
         <section>
           <section>
@@ -396,20 +455,29 @@ Reflect.loader instanceof Reflect.Loader; // -> true
               <li class="fragment">XHR, WebSockets</li>
             </ul>
           </section>
+          <section data-background="img/fetch.gif">
+            <div class="black-box">
+              <h3>Examples</h3>
+            </div>
+          </section>
         </section>
         <section>
           <section>
-            <h1>Translate</h1>
+            <div>
+              <h1>Translate</h1>
+            </div>
           </section>
           <section>
             <h3>Source to source</h3>
             <ul>
-              <li>Given source code.</li>
-              <li>Translate into more source.</li>
+              <li class="fragment">Given source code.</li>
+              <li class="fragment">Translate into more source.</li>
             </ul>
           </section>
-          <section>
-            <h3>Examples</h3>
+          <section data-background="img/transformer.gif">
+            <div class="black-box">
+              <h3>Examples</h3>
+            </div>
           </section>
         </section>
         <section>
@@ -424,9 +492,11 @@ Reflect.loader instanceof Reflect.Loader; // -> true
               </ul>
             </section>
         </section>
-        <section>
-          <h1>THE END</h1>
-          <h3>BY Matthew Phillips</h3>
+        <section data-background="img/happy.gif">
+          <div class="black-box">
+            <h1>THE END</h1>
+            <h3>BY Matthew Phillips</h3>
+          </div>
         </section>
 
       </div>

@@ -25,6 +25,7 @@
     "express": "~2.5.9",
     "jquery": "^2.1.3",
     "mustache": "~0.7.2",
+    "sibilant": "^0.2.0",
     "socket.io": "~0.9.13",
     "steal": "^0.9.3",
     "underscore": "~1.5.1"
@@ -49,8 +50,12 @@
   "system": {
     "npmDependencies": [
       "jquery",
-      "can"
+      "can",
+      "sibilant"
     ],
+    "map": {
+      "sibilant": "sibilant/lib/browser"
+    },
     "configDependencies": [],
     "transpiler": "babel"
   }

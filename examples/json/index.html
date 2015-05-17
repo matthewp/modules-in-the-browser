@@ -1,0 +1,15 @@
+<title>json extension</title>
+<script src="../../lib/steal/steal.js" config="../../package.json!npm">
+
+import $ from "jquery";
+
+System.baseURL = "./";
+
+
+
+System.import("package.json").then(function(data){
+  console.log(JSON.stringify(data, null, " "));
+});
+
+
+</script>
