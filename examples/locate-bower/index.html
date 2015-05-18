@@ -3,6 +3,9 @@
 
 import $ from "jquery";
 
+System.baseURL = "./";
+
+
 System.import("kitten").then(function(kitten){
   $("#kitten").html(kitten.default());
 });
