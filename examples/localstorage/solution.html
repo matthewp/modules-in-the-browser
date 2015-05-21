@@ -1,0 +1,32 @@
+
+<title>localstorage</title>
+<script src="../../lib/steal/steal.js" config="../../package.json!npm">
+
+import $ from "jquery";
+
+System.baseURL = "./";
+
+let fetch = System.fetch;
+System.fetch = function(load){
+  let name = load.name; // foo
+
+  // Is the code in localStorage
+  if(localStorage[name]) {
+    let source = localStorage[name];
+    return source;
+  }
+
+  return fetch.call(this, load).then(function(source){
+    localStorage[name] = source;
+    return source;
+  });
+};
+
+
+System.import("foo").then(function(foo){
+  console.log(foo.default());
+});
+
+
+
+</script>

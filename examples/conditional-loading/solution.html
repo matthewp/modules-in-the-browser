@@ -1,0 +1,32 @@
+<title>conditional loading</title>
+<script src="../../lib/steal/steal.js" config="../../package.json!npm">
+"format es6";
+
+System.baseURL = "./";
+
+System.set("@nothing", System.newModule({}));
+
+
+let normalize = System.normalize;
+System.normalize = function(name, parentName, parentAddress){
+  let idx = name.indexOf("?");
+
+  if(idx > 0) {
+    let moduleName = name.substr(0, idx); // raf
+    let feature = name.substr(idx + 1); // requestAnimationFrame
+
+    if(window[feature]) {
+      return "@nothing";
+    }
+
+    return normalize.call(this, moduleName, parentName, parentAddress);
+  }
+
+  return normalize.apply(this, arguments);
+};
+
+
+System.import("raf?requestAnimationFrame");
+
+
+</script>

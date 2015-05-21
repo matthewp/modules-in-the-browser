@@ -6,22 +6,6 @@ import $ from "jquery";
 System.baseURL = "./";
 
 
-let instantiate = System.instantiate;
-System.instantiate = function(load){
-  // load.source {"name" : foo}
-  let source = load.source;
-
-  return {
-    deps: [],
-    execute: function(){
-      let data = JSON.parse(source);
-      return System.newModule(data);
-    }
-  };
-};
-
-
-
 System.import("package.json").then(function(data){
   console.log(JSON.stringify(data, null, " "));
 });

@@ -1,0 +1,22 @@
+<title>locate bower_components</title>
+<script src="../../lib/steal/steal.js" config="../../package.json!npm">
+
+import $ from "jquery";
+
+System.baseURL = "./";
+
+let locate = System.locate;
+System.locate = function(load){
+  let name = load.name; //kitten
+
+  return ["bower_components", name, name + ".js"].join("/");
+  // bower_components/kitten/kitten.js
+};
+
+System.import("kitten").then(function(kitten){
+  $("#kitten").html(kitten.default());
+});
+
+
+</script>
+<div id="kitten"></div>
